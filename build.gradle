@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.graalvm.buildtools.native' version '0.10.3'
+}
+
+group = 'se.tristanfarkas'
+version = '0.1.0'
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'se.tristanfarkas.forza.Main'
+}
+
+dependencies {
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.squareup.okhttp3:okhttp-tls:4.12.0'
+    implementation 'org.jsoup:jsoup:1.18.1'
+    implementation 'com.github.mwiede:jsch:0.2.21'
+}
+
+jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
+
+    manifest {
+        attributes(
+                'Main-Class': 'se.tristanfarkas.forza.Main'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
